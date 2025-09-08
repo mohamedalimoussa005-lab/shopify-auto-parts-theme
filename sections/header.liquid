@@ -1,0 +1,42 @@
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand">
+      <a class="logo" href="/" aria-label="{{ shop.name }}">
+        {% if settings.header_logo != blank %}
+          <img src="{{ settings.header_logo | image_url: width: 240 }}" alt="{{ shop.name }}" loading="lazy">
+        {% else %}
+          <span class="logo-text">{{ settings.header_logo_text | default: shop.name }}</span>
+        {% endif %}
+      </a>
+    </div>
+    <nav class="main-nav" role="navigation" aria-label="Navigation principale">
+      {% if linklists.main-menu and linklists.main-menu.links.size > 0 %}
+        <ul>
+          {% for link in linklists.main-menu.links %}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </nav>
+    <div class="header-actions">
+      <form action="/search" method="get" role="search" class="site-search">
+        <input type="hidden" name="type" value="product">
+        <input type="search" name="q" placeholder="Rechercher une pièce..." aria-label="Rechercher">
+      </form>
+      <a class="cart-link" href="/cart" aria-label="Panier">
+        <span class="cart-icon">🛒</span>
+        <span class="cart-count">{{ cart.item_count }}</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "En-tête",
+  "settings": [
+    {"type": "image_picker", "id": "header_logo", "label": "Logo"},
+    {"type": "text", "id": "header_logo_text", "label": "Texte du logo", "default": "Atelier Auto"}
+  ]
+}
+{% endschema %}

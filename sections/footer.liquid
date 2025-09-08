@@ -1,0 +1,36 @@
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-col">
+      <h4>À propos</h4>
+      <p>Spécialiste des pièces automobiles de qualité professionnelle.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Liens</h4>
+      <ul>
+        {% if linklists.footer and linklists.footer.links %}
+          {% for link in linklists.footer.links %}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {% endfor %}
+        {% endif %}
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul class="contact-list">
+        {% if shop.email %}<li><a href="mailto:{{ shop.email }}">{{ shop.email }}</a></li>{% endif %}
+        {% if shop.phone %}<li><a href="tel:{{ shop.phone | remove: ' ' }}">{{ shop.phone }}</a></li>{% endif %}
+        <li>{{ shop.address.street }} {{ shop.address.city }}</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© {{ 'now' | date: '%Y' }} {{ shop.name }}. Tous droits réservés.</p>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Pied de page",
+  "settings": []
+}
+{% endschema %}
