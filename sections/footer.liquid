@@ -7,8 +7,14 @@
     <div class="footer-col">
       <h4>Liens</h4>
       <ul>
-        {% if linklists.footer and linklists.footer.links %}
-          {% for link in linklists.footer.links %}
+        {% assign footer_menu_handle = section.settings.footer_menu %}
+        {% if footer_menu_handle != blank %}
+          {% assign footer_menu = linklists[footer_menu_handle] %}
+        {% else %}
+          {% assign footer_menu = linklists['footer'] %}
+        {% endif %}
+        {% if footer_menu and footer_menu.links %}
+          {% for link in footer_menu.links %}
             <li><a href="{{ link.url }}">{{ link.title }}</a></li>
           {% endfor %}
         {% endif %}
@@ -31,6 +37,8 @@
 {% schema %}
 {
   "name": "Pied de page",
-  "settings": []
+  "settings": [
+    {"type": "link_list", "id": "footer_menu", "label": "Menu de pied de page"}
+  ]
 }
 {% endschema %}

@@ -10,9 +10,15 @@
       </a>
     </div>
     <nav class="main-nav" role="navigation" aria-label="Navigation principale">
-      {% if linklists.main-menu and linklists.main-menu.links.size > 0 %}
+      {% assign menu_handle = section.settings.menu %}
+      {% if menu_handle != blank %}
+        {% assign menu = linklists[menu_handle] %}
+      {% else %}
+        {% assign menu = linklists['main-menu'] %}
+      {% endif %}
+      {% if menu and menu.links and menu.links.size > 0 %}
         <ul>
-          {% for link in linklists.main-menu.links %}
+          {% for link in menu.links %}
             <li><a href="{{ link.url }}">{{ link.title }}</a></li>
           {% endfor %}
         </ul>
@@ -36,7 +42,8 @@
   "name": "En-tête",
   "settings": [
     {"type": "image_picker", "id": "header_logo", "label": "Logo"},
-    {"type": "text", "id": "header_logo_text", "label": "Texte du logo", "default": "Atelier Auto"}
+    {"type": "text", "id": "header_logo_text", "label": "Texte du logo", "default": "Atelier Auto"},
+    {"type": "link_list", "id": "menu", "label": "Menu principal"}
   ]
 }
 {% endschema %}
