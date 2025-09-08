@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Roboto:wght@400;500;700&family=Open+Sans:wght@400;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #root {
+    height: 100%;
+  }
+  body {
+    @apply bg-gray-50 text-gray-900 font-sans antialiased;
+  }
+  h1, h2, h3, h4, .heading {
+    font-family: 'Montserrat', ui-sans-serif, system-ui, -apple-system;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-md bg-primary text-white px-5 py-2.5 font-medium hover:bg-primary-600 transition-colors;
+  }
+  .btn-accent {
+    @apply inline-flex items-center justify-center rounded-md bg-accent text-white px-5 py-2.5 font-medium hover:brightness-110 transition;
+  }
+  .card {
+    @apply bg-white rounded-xl shadow-card hover:shadow-lg transition overflow-hidden;
+  }
+}
