@@ -6,6 +6,8 @@ import Home from './pages/Home'
 import Category from './pages/Category'
 import ProductDetail from './pages/ProductDetail'
 import SearchResults from './pages/SearchResults'
+import Cart from './pages/Cart'
+import Favorites from './pages/Favorites'
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
           <Route path="/categorie/:name" element={<Category />} />
           <Route path="/produit/:id" element={<ProductDetail />} />
           <Route path="/recherche" element={<SearchResults />} />
+          <Route path="/panier" element={<Cart />} />
+          <Route path="/favoris" element={<Favorites />} />
         </Routes>
       </main>
       <Footer />

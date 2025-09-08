@@ -2,11 +2,13 @@ import { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import { PRODUCTS } from '../data/products'
 import Breadcrumbs from '../components/Breadcrumbs'
+import { useShop } from '../context/ShopContext'
 
 export default function ProductDetail() {
   const { id } = useParams()
   const product = useMemo(() => PRODUCTS.find((p) => p.id === id), [id])
   if (!product) return null
+  const { addToCart, toggleFavorite, isFavorite } = useShop()
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-10">
@@ -21,8 +23,8 @@ export default function ProductDetail() {
           <div className="mt-4 text-2xl font-bold">{product.price.toFixed(2)}€</div>
           <p className="mt-4 text-gray-700">{product.description}</p>
           <div className="mt-6 flex gap-3">
-            <button className="btn-primary">Ajouter au panier</button>
-            <button className="btn-accent">Ajouter aux favoris</button>
+            <button className="btn-primary" onClick={() => addToCart(product.id, 1)}>Ajouter au panier</button>
+            <button className="btn-accent" onClick={() => toggleFavorite(product.id)}>{isFavorite(product.id) ? 'Retirer des favoris' : 'Ajouter aux favoris'}</button>
           </div>
         </div>
       </div>

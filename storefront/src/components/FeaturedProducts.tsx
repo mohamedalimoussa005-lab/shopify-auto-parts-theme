@@ -1,8 +1,10 @@
 import { useMemo, useState } from 'react'
 import classNames from 'classnames'
 import { PRODUCTS, BRANDS, CATEGORIES } from '../data/products'
+import { useShop } from '../context/ShopContext'
 
 export default function FeaturedProducts() {
+  const { addToCart, toggleFavorite, isFavorite } = useShop()
   const [selectedBrands, setSelectedBrands] = useState<string[]>([])
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const [maxPrice, setMaxPrice] = useState<number>(200)
@@ -74,7 +76,12 @@ export default function FeaturedProducts() {
                 <p className="text-sm text-gray-500">Ref. {p.ref}</p>
                 <div className="mt-2 flex items-center justify-between">
                   <span className="text-lg font-semibold">{p.price.toFixed(2)}€</span>
-                  <a className="btn-primary" href={`/produit/${p.id}`}>Voir</a>
+                  <div className="flex gap-2">
+                    <button className="btn-primary" onClick={() => addToCart(p.id, 1)}>Ajouter</button>
+                    <button className={classNames('px-3 py-2 rounded-md border', isFavorite(p.id) ? 'border-accent text-accent' : 'hover:bg-gray-50')} onClick={() => toggleFavorite(p.id)}>
+                      {isFavorite(p.id) ? '★' : '☆'}
+                    </button>
+                  </div>
                 </div>
               </div>
             </article>

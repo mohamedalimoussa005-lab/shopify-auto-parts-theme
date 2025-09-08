@@ -2,6 +2,7 @@ import { Fragment, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Dialog, Transition } from '@headlessui/react'
 import { MagnifyingGlassIcon, HeartIcon, ShoppingCartIcon, UserIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { useShop } from '../context/ShopContext'
 
 const navItems = [
   { label: 'Accueil', to: '/' },
@@ -17,6 +18,7 @@ export default function Header() {
   const [query, setQuery] = useState('')
   const [mobileOpen, setMobileOpen] = useState(false)
   const navigate = useNavigate()
+  const { cartQty, favorites } = useShop()
 
   const suggestions = useMemo(() => searchProducts(query).slice(0, 6), [query])
 
@@ -66,14 +68,20 @@ export default function Header() {
           </nav>
 
           <div className="ml-auto flex items-center gap-3">
-            <Link to="/favoris" className="p-2 hover:text-accent" aria-label="Favoris">
+            <Link to="/favoris" className="relative p-2 hover:text-accent" aria-label="Favoris">
               <HeartIcon className="w-6 h-6" />
+              {favorites.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-accent text-white text-[10px] leading-none rounded-full px-1.5 py-1">{favorites.length}</span>
+              )}
             </Link>
             <Link to="/compte" className="p-2 hover:text-primary" aria-label="Compte">
               <UserIcon className="w-6 h-6" />
             </Link>
-            <Link to="/panier" className="p-2 hover:text-primary" aria-label="Panier">
+            <Link to="/panier" className="relative p-2 hover:text-primary" aria-label="Panier">
               <ShoppingCartIcon className="w-6 h-6" />
+              {cartQty > 0 && (
+                <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] leading-none rounded-full px-1.5 py-1">{cartQty}</span>
+              )}
             </Link>
           </div>
         </div>
