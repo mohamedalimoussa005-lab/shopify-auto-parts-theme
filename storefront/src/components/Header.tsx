@@ -1,5 +1,5 @@
 import { Fragment, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Dialog, Transition } from '@headlessui/react'
 import { MagnifyingGlassIcon, HeartIcon, ShoppingCartIcon, UserIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 
@@ -11,25 +11,18 @@ const navItems = [
   { label: 'Blog / Conseils', to: '/blog' },
 ]
 
-const sampleData = [
-  'Plaquettes de frein',
-  'Disques de frein',
-  'Filtre à huile',
-  'Alternateur',
-  'Pompe à eau',
-  'Amortisseur',
-  'Échappement',
-]
+import { searchProducts } from '../data/products'
 
 export default function Header() {
   const [query, setQuery] = useState('')
   const [mobileOpen, setMobileOpen] = useState(false)
+  const navigate = useNavigate()
 
-  const suggestions = useMemo(() => {
-    const q = query.trim().toLowerCase()
-    if (!q) return []
-    return sampleData.filter((s) => s.toLowerCase().includes(q)).slice(0, 6)
-  }, [query])
+  const suggestions = useMemo(() => searchProducts(query).slice(0, 6), [query])
+
+  const goSearch = () => {
+    if (query.trim()) navigate(`/recherche?q=${encodeURIComponent(query.trim())}`)
+  }
 
   return (
     <header className="bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/70 sticky top-0 z-40 border-b border-gray-200">
@@ -49,14 +42,15 @@ export default function Header() {
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && goSearch()}
               className="w-full rounded-full border border-gray-300 pl-11 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary"
               placeholder="Recherchez par modèle, marque ou référence"
             />
             {suggestions.length > 0 && (
               <div className="absolute top-full mt-2 w-full bg-white border border-gray-200 rounded-xl shadow-card overflow-hidden">
-                {suggestions.map((s) => (
-                  <button key={s} className="w-full text-left px-4 py-2 hover:bg-gray-50">
-                    {s}
+                {suggestions.map((p) => (
+                  <button key={p.id} onClick={() => navigate(`/produit/${p.id}`)} className="w-full text-left px-4 py-2 hover:bg-gray-50">
+                    {p.name} · {p.brand}
                   </button>
                 ))}
               </div>
@@ -124,6 +118,7 @@ export default function Header() {
                     <input
                       value={query}
                       onChange={(e) => setQuery(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && (setMobileOpen(false), goSearch())}
                       className="w-full rounded-full border border-gray-300 pl-11 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary"
                       placeholder="Recherchez par modèle, marque ou référence"
                     />

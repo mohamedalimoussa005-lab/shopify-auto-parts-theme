@@ -1,66 +1,6 @@
 import { useMemo, useState } from 'react'
 import classNames from 'classnames'
-
-type Product = {
-  id: string
-  name: string
-  ref: string
-  price: number
-  brand: string
-  category: string
-  image: string
-  rating?: number
-}
-
-const PRODUCTS: Product[] = [
-  {
-    id: 'oil-filter',
-    name: 'Filtre à huile',
-    ref: 'OF-1234',
-    price: 8.99,
-    brand: 'Bosch',
-    category: 'Moteur',
-    image:
-      'https://images.unsplash.com/photo-1592853625591-141c13454e43?q=80&w=800&auto=format&fit=crop',
-    rating: 4.6,
-  },
-  {
-    id: 'brake-disc',
-    name: 'Disques de frein',
-    ref: 'BD-5678',
-    price: 49.59,
-    brand: 'Brembo',
-    category: 'Freins',
-    image:
-      'https://images.unsplash.com/photo-1517148262263-68bfae05df57?q=80&w=800&auto=format&fit=crop',
-    rating: 4.8,
-  },
-  {
-    id: 'gear-knob',
-    name: 'Pommeau de changement de vitesse',
-    ref: 'GK-1010',
-    price: 18.09,
-    brand: 'Sparco',
-    category: 'Intérieur',
-    image:
-      'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=800&auto=format&fit=crop',
-    rating: 4.2,
-  },
-  {
-    id: 'alternator',
-    name: 'Alternateur',
-    ref: 'ALT-9902',
-    price: 150.0,
-    brand: 'Valeo',
-    category: 'Électrique',
-    image:
-      'https://images.unsplash.com/photo-1610420464128-2ca1be40add5?q=80&w=800&auto=format&fit=crop',
-    rating: 4.4,
-  },
-]
-
-const BRANDS = ['Bosch', 'Brembo', 'Sparco', 'Valeo']
-const CATEGORIES = ['Moteur', 'Freins', 'Intérieur', 'Électrique']
+import { PRODUCTS, BRANDS, CATEGORIES } from '../data/products'
 
 export default function FeaturedProducts() {
   const [selectedBrands, setSelectedBrands] = useState<string[]>([])
@@ -134,7 +74,7 @@ export default function FeaturedProducts() {
                 <p className="text-sm text-gray-500">Ref. {p.ref}</p>
                 <div className="mt-2 flex items-center justify-between">
                   <span className="text-lg font-semibold">{p.price.toFixed(2)}€</span>
-                  <button className="btn-primary">Ajouter au panier</button>
+                  <a className="btn-primary" href={`/produit/${p.id}`}>Voir</a>
                 </div>
               </div>
             </article>
