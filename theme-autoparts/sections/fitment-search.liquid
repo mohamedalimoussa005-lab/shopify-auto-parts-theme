@@ -1,0 +1,61 @@
+<section class="container" style="margin:18px 0">
+  <form id="fitment-form" class="card" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;align-items:end">
+    <div>
+      <label for="fitment-make">Marque</label>
+      <select id="fitment-make" required>
+        <option value="">Sélectionner</option>
+        {% for m in section.blocks %}
+          {% if m.type == 'make' %}
+            <option value="{{ m.settings.name }}">{{ m.settings.name }}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <label for="fitment-model">Modèle</label>
+      <select id="fitment-model" disabled required>
+        <option value="">—</option>
+      </select>
+    </div>
+    <div>
+      <label for="fitment-year">Année</label>
+      <select id="fitment-year" disabled required>
+        <option value="">—</option>
+      </select>
+    </div>
+    <div>
+      <button id="fitment-apply" class="btn" type="button" disabled>Filtrer</button>
+    </div>
+  </form>
+  <script>
+    window.__FITMENT__ = window.__FITMENT__ || {};
+    window.__FITMENT__.data = {
+      {% for b in section.blocks %}
+        {% if b.type == 'make' %}
+          "{{ b.settings.name | escape }}": {
+            {% assign models = b.settings.models | split: '\n' %}
+            {% for line in models %}
+              {% assign pair = line | split: ':' %}
+              "{{ pair[0] | strip | escape }}": [{{ pair[1] | default: '' | split: ',' | map: 'strip' | join: '","' | prepend: '"' | append: '"' }}]{% unless forloop.last %},{% endunless %}
+            {% endfor %}
+          }{% unless forloop.last %},{% endunless %}
+        {% endif %}
+      {% endfor %}
+    };
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "Recherche compatibilité (MMY)",
+  "settings": [],
+  "blocks": [
+    {"type":"make","name":"Marque","settings":[
+      {"type":"text","id":"name","label":"Nom de la marque","default":"Peugeot"},
+      {"type":"textarea","id":"models","label":"Modèles et années (format: 208:2015,2016,2017)","default":"208:2015,2016,2017"}
+    ]}
+  ],
+  "presets": [{"name":"Barre de compatibilité"}]
+}
+{% endschema %}
+

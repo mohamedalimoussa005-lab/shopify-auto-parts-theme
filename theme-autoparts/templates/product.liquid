@@ -1,0 +1,64 @@
+<div class="container" style="padding:20px 0">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start">
+    <div>
+      {% if product.featured_image %}
+        <img src="{{ product.featured_image | img_url: '1024x' }}" alt="{{ product.title | escape }}" style="width:100%;height:auto">
+      {% else %}
+        {{ 'product-1' | placeholder_svg_tag }}
+      {% endif %}
+    </div>
+    <div>
+      <h1>{{ product.title }}</h1>
+      <div class="price">{{ product.price | money }}</div>
+      <div class="badges" style="margin:10px 0">
+        <span class="badge">🔒 Paiement sécurisé</span>
+        <span class="badge">🚚 Livraison rapide</span>
+      </div>
+      <form method="post" action="/cart/add" style="display:flex;gap:8px;align-items:center">
+        <select name="id">
+          {% for v in product.variants %}
+            <option value="{{ v.id }}" {% if v == product.selected_or_first_available_variant %}selected{% endif %} {% unless v.available %}disabled{% endunless %}>
+              {{ v.title }} — {{ v.price | money }}{% unless v.available %} (Rupture){% endunless %}
+            </option>
+          {% endfor %}
+        </select>
+        <button class="btn" type="submit">Ajouter au panier</button>
+        <button class="icon-btn" data-wishlist data-handle="{{ product.handle }}" type="button">❤</button>
+      </form>
+
+      <div class="rte" style="margin-top:12px">{{ product.description }}</div>
+
+      <h3 style="margin-top:20px">Compatibilité véhicule</h3>
+      {% assign fitments = product.metafields.autoparts.fitment | default: '' | split: ',' %}
+      {% if fitments.size > 0 and fitments.first != '' %}
+        <table style="width:100%;border-collapse:collapse;border:1px solid #e3e6ea;border-radius:10px;overflow:hidden">
+          <thead><tr style="background:#f6f8fa"><th style="text-align:left;padding:8px">Marque</th><th style="text-align:left;padding:8px">Modèle</th><th style="text-align:left;padding:8px">Année</th></tr></thead>
+          <tbody>
+            {% for triplet in fitments %}
+              {% assign parts = triplet | split: '|' %}
+              <tr><td style="padding:8px">{{ parts[0] }}</td><td style="padding:8px">{{ parts[1] }}</td><td style="padding:8px">{{ parts[2] }}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p>Aucune donnée de compatibilité fournie.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if product.collections.first %}
+    <h2 style="margin-top:24px">Produits similaires</h2>
+    <div class="product-grid">
+      {% for p in product.collections.first.products limit:4 %}
+        {% if p.id != product.id %}
+          <article class="card">
+            <a class="media" href="{{ p.url }}"><img src="{{ p | img_url: '540x' }}" alt="{{ p.title | escape }}"></a>
+            <div style="font-weight:600">{{ p.title }}</div>
+            <div class="price">{{ p.price | money }}</div>
+          </article>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
+

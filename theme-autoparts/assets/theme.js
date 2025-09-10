@@ -85,5 +85,81 @@ document.addEventListener('DOMContentLoaded', () => {
     filterRoot.addEventListener('change', applyFilters);
     applyFilters();
   }
+
+  // Init extras
+  initCarousel();
+  initWishlist();
+  initFitment();
 });
+
+// Wishlist (localStorage)
+const Wishlist = {
+  key: 'ap_wishlist',
+  get() { try { return JSON.parse(localStorage.getItem(this.key) || '[]'); } catch(e){ return []; } },
+  set(list) { localStorage.setItem(this.key, JSON.stringify(list)); },
+  has(handle) { return this.get().includes(handle); },
+  toggle(handle) { const list = this.get(); const i = list.indexOf(handle); if (i>-1) list.splice(i,1); else list.push(handle); this.set(list); document.dispatchEvent(new CustomEvent('wishlist:update')); }
+};
+
+function initWishlist(){
+  document.querySelectorAll('[data-wishlist]')?.forEach(btn=>{
+    const handle = btn.getAttribute('data-handle');
+    const set = ()=> btn.classList.toggle('active', Wishlist.has(handle));
+    set();
+    btn.addEventListener('click', (e)=>{ e.preventDefault(); Wishlist.toggle(handle); set(); });
+  });
+  const grid = document.querySelector('#WishlistGrid');
+  if (grid){
+    const handles = Wishlist.get();
+    if (handles.length === 0){ grid.innerHTML = '<p>Votre liste est vide.</p>'; return; }
+    Promise.all(handles.map(h=>fetch(`/products/${h}.js`).then(r=>r.json()))).then(products=>{
+      grid.innerHTML = products.map(p=>`
+        <article class="card">
+          <a class="media" href="/products/${p.handle}"><img src="${p.images[0] || ''}" alt="${p.title}"></a>
+          <div style="font-weight:600">${p.title}</div>
+          <div class="price">${(p.price/100).toLocaleString('fr-FR',{style:'currency',currency:'EUR'})}</div>
+          <div class="quick-actions"><button class="icon-btn active" data-wishlist data-handle="${p.handle}">❤</button></div>
+        </article>`).join('');
+      initWishlist();
+    });
+  }
+}
+
+function initCarousel(){
+  document.querySelectorAll('.carousel').forEach(carousel=>{
+    const track = carousel.querySelector('.carousel-track');
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    if(!track || slides.length < 2) return;
+    let i = 0;
+    const go = (n)=>{ i = (n+slides.length) % slides.length; track.style.transform = `translateX(-${i*100}%)`; };
+    setInterval(()=>go(i+1), 6000);
+  });
+}
+
+// Fitment (Make/Model/Year)
+function initFitment(){
+  const data = (window.__FITMENT__ && window.__FITMENT__.data) || null;
+  const form = document.querySelector('#fitment-form');
+  if(!form || !data) return;
+  const selMake = document.querySelector('#fitment-make');
+  const selModel = document.querySelector('#fitment-model');
+  const selYear = document.querySelector('#fitment-year');
+  const applyBtn = document.querySelector('#fitment-apply');
+  selMake.addEventListener('change', ()=>{
+    const make = selMake.value; selModel.innerHTML = '<option value="">Sélectionner</option>'; selModel.disabled = !make; selYear.disabled = true; selYear.innerHTML = '<option value="">—</option>';
+    if(make){ Object.keys(data[make]||{}).forEach(m=>{ const o=document.createElement('option'); o.value=m; o.textContent=m; selModel.appendChild(o); }); }
+  });
+  selModel.addEventListener('change', ()=>{
+    const make = selMake.value; const model = selModel.value; selYear.innerHTML = '<option value="">Sélectionner</option>'; selYear.disabled = !model;
+    if(model){ (data[make]?.[model]||[]).forEach(y=>{ const o=document.createElement('option'); o.value=y; o.textContent=y; selYear.appendChild(o); }); }
+  });
+  selYear.addEventListener('change', ()=>{ applyBtn.disabled = !(selMake.value && selModel.value && selYear.value); });
+  applyBtn.addEventListener('click', ()=>{
+    const query = `${selMake.value}|${selModel.value}|${selYear.value}`.toLowerCase();
+    document.querySelectorAll('[data-product-card]')?.forEach(card=>{
+      const fit = (card.getAttribute('data-fitment')||'').toLowerCase();
+      card.style.display = fit.includes(query) ? '' : 'none';
+    });
+  });
+}
 

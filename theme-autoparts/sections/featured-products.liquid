@@ -33,7 +33,8 @@
   <div class="product-grid">
     {% for product in coll.products limit: section.settings.limit %}
       {% assign price_number = product.price | divided_by: 100.0 %}
-      <article class="card" data-product-card data-vendor="{{ product.vendor }}" data-type="{{ product.type }}" data-price="{{ price_number }}" data-rating="{{ product.metafields.reviews.rating.value | default: 0 }}">
+      {% assign fitment_str = product.metafields.autoparts.fitment | default: '' %}
+      <article class="card" data-product-card data-vendor="{{ product.vendor }}" data-type="{{ product.type }}" data-price="{{ price_number }}" data-rating="{{ product.metafields.reviews.rating.value | default: 0 }}" data-fitment="{{ fitment_str | escape }}">
         <a class="media" href="{{ product.url }}">
           <img src="{{ product | img_url: '540x' }}" alt="{{ product.title | escape }}">
         </a>
@@ -45,6 +46,9 @@
           <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
           <button class="btn" type="submit">Ajouter au panier</button>
         </form>
+        <div class="quick-actions">
+          <button class="icon-btn" type="button" aria-label="Ajouter aux favoris" data-wishlist data-handle="{{ product.handle }}">❤</button>
+        </div>
       </article>
     {% else %}
       <p>Aucun produit trouvé. Sélectionnez une collection.</p>
