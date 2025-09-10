@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Paramètres de thème",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Fond (gris clair)",
+        "default": "#f5f6f7"
+      },
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Bleu foncé (primaire)",
+        "default": "#0d2b4d"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Orange (accent/CTA)",
+        "default": "#ff7a18"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_heading",
+        "label": "Police des titres",
+        "default": "montserrat_n6"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_body",
+        "label": "Police du texte",
+        "default": "roboto_n4"
+      }
+    ]
+  }
+]
+

@@ -1,0 +1,41 @@
+<footer class="site-footer">
+  <div class="container footer-top">
+    <div>
+      <h3>{{ shop.name }}</h3>
+      <p>Pièces auto de qualité. Livraison rapide, garantie constructeur, paiement sécurisé.</p>
+      <div class="badges">
+        <span class="badge">🔒 Paiement sécurisé</span>
+        <span class="badge">🚚 Livraison garantie</span>
+      </div>
+    </div>
+    <div>
+      <h4>Liens rapides</h4>
+      <ul>
+        <li><a href="/pages/help">Aide</a></li>
+        <li><a href="/pages/contact">Contact</a></li>
+        <li><a href="/pages/faq">FAQ</a></li>
+        <li><a href="/policies/refund-policy">Retours</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Suivez-nous</h4>
+      <p><a href="#">Instagram</a> · <a href="#">Facebook</a> · <a href="#">YouTube</a></p>
+    </div>
+    <div>
+      <h4>Newsletter</h4>
+      <form class="newsletter" method="post" action="/contact#newsletter">
+        <input type="email" name="contact[email]" placeholder="Adresse email" required>
+        <button class="btn btn-accent" type="submit">S’inscrire</button>
+      </form>
+      <small>Informations légales · <a href="/policies/privacy-policy">Confidentialité</a> · <a href="/policies/terms-of-service">CGV</a></small>
+    </div>
+  </div>
+  <div class="container" style="padding:10px 0;border-top:1px solid #1e2a39;color:#9fb0c3;">
+    <small>© {{ 'now' | date: '%Y' }} {{ shop.name }}. Tous droits réservés.</small>
+  </div>
+
+  {% schema %}
+  {"name":"Pied de page","settings":[]}
+  {% endschema %}
+</footer>
+
