@@ -1,0 +1,59 @@
+<section class="parts-search" data-section-type="parts-search">
+  <h2>{{ section.settings.title }}</h2>
+  <form data-parts-search>
+    <div class="fields">
+      <label class="sr-only" for="ps-marque">Marque</label>
+      <select id="ps-marque" name="marque">
+        <option value="">Toutes les marques</option>
+        {% assign marques = section.settings.marques | split: ',' %}
+        {% for m in marques %}
+          {% assign mv = m | strip %}
+          {% if mv != '' %}<option value="{{ mv }}">{{ mv }}</option>{% endif %}
+        {% endfor %}
+      </select>
+      <label class="sr-only" for="ps-modele">Modèle</label>
+      <select id="ps-modele" name="modele">
+        <option value="">Tous les modèles</option>
+        {% assign modeles = section.settings.modeles | split: ',' %}
+        {% for v in modeles %}
+          {% assign vv = v | strip %}
+          {% if vv != '' %}<option value="{{ vv }}">{{ vv }}</option>{% endif %}
+        {% endfor %}
+      </select>
+      <label class="sr-only" for="ps-annee">Année</label>
+      <select id="ps-annee" name="annee">
+        <option value="">Toutes les années</option>
+        {% assign annees = section.settings.annees | split: ',' %}
+        {% for a in annees %}
+          {% assign av = a | strip %}
+          {% if av != '' %}<option value="{{ av }}">{{ av }}</option>{% endif %}
+        {% endfor %}
+      </select>
+      <label class="sr-only" for="ps-type">Type de pièce</label>
+      <select id="ps-type" name="type_piece">
+        <option value="">Tous types</option>
+        {% assign types = section.settings.types | split: ',' %}
+        {% for t in types %}
+          {% assign tv = t | strip %}
+          {% if tv != '' %}<option value="{{ tv }}">{{ tv }}</option>{% endif %}
+        {% endfor %}
+      </select>
+    </div>
+    <div style="margin-top:12px">
+      <button type="submit" class="btn-primary">Rechercher</button>
+    </div>
+  </form>
+</section>
+
+{% schema %}
+{
+  "name": "Recherche de pièces",
+  "settings": [
+    {"type": "text", "id": "title", "label": "Titre", "default": "Trouvez la pièce compatible"},
+    {"type": "textarea", "id": "marques", "label": "Marques (séparées par des virgules)", "default": "Renault, Peugeot, Citroën, Volkswagen, BMW, Audi"},
+    {"type": "textarea", "id": "modeles", "label": "Modèles (séparés par des virgules)", "default": "Clio, 208, C3, Golf, Serie 3, A4"},
+    {"type": "textarea", "id": "annees", "label": "Années (séparées par des virgules)", "default": "2005, 2008, 2012, 2016, 2020"},
+    {"type": "textarea", "id": "types", "label": "Types de pièces (séparés par des virgules)", "default": "Freinage, Filtration, Moteur, Suspension, Électricité"}
+  ]
+}
+{% endschema %}

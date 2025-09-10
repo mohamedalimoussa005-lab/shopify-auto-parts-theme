@@ -1,0 +1,52 @@
+<section class="promo-carousel" data-section-type="promo-carousel" data-autoplay="{{ section.settings.autoplay }}" data-interval="{{ section.settings.interval }}">
+  <div class="slides">
+    {% for block in section.blocks %}
+      <div class="slide" {{ block.shopify_attributes }}>
+        {% if block.settings.image != blank %}
+          <img src="{{ block.settings.image | image_url: width: 1600 }}" alt="{{ block.settings.title | escape }}">
+        {% endif %}
+        <div class="slide-overlay">
+          <div>
+            <h3>{{ block.settings.title }}</h3>
+            <p>{{ block.settings.subtitle }}</p>
+            {% if block.settings.link_url != blank %}
+              <a class="btn-primary" href="{{ block.settings.link_url }}">{{ block.settings.link_label | default: 'Voir l\'offre' }}</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <div class="controls">
+    {% for block in section.blocks %}
+      <span class="dot{% if forloop.first %} active{% endif %}"></span>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Carrousel promos",
+  "settings": [
+    {"type": "checkbox", "id": "autoplay", "label": "Lecture automatique", "default": true},
+    {"type": "range", "id": "interval", "min": 3000, "max": 12000, "step": 500, "unit": "ms", "label": "Intervalle", "default": 5000}
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Diapositive",
+      "settings": [
+        {"type": "image_picker", "id": "image", "label": "Image"},
+        {"type": "text", "id": "title", "label": "Titre", "default": "Promo atelier"},
+        {"type": "text", "id": "subtitle", "label": "Sous-titre", "default": "Jusqu'à -30%"},
+        {"type": "url", "id": "link_url", "label": "Lien"},
+        {"type": "text", "id": "link_label", "label": "Texte du bouton", "default": "Découvrir"}
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {"name": "Carrousel promos", "category": "Accueil", "blocks": [{"type": "slide"}, {"type": "slide"}]}
+  ]
+}
+{% endschema %}

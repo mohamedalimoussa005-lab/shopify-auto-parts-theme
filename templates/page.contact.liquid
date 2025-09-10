@@ -1,0 +1,16 @@
+<div class="contact-page">
+  <h1>Contact</h1>
+  {% form 'contact' %}
+    {{ form.errors | default_errors }}
+    {% if form.posted_successfully? %}
+      <p>Merci pour votre message, nous vous répondrons rapidement.</p>
+    {% endif %}
+    <div style="display:grid;gap:12px;max-width:640px">
+      <input type="text" name="contact[name]" placeholder="Nom" required>
+      <input type="email" name="contact[email]" placeholder="Email" required>
+      <input type="tel" name="contact[phone]" placeholder="Téléphone">
+      <textarea name="contact[body]" rows="6" placeholder="Votre message" required></textarea>
+      <button type="submit">Envoyer</button>
+    </div>
+  {% endform %}
+</div>

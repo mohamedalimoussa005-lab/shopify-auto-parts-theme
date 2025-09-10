@@ -1,0 +1,42 @@
+<div class="product-page">
+  <div class="media-gallery">
+    {% if product.media.size > 0 %}
+      <img src="{{ product.media.first | image_url: width: 900 }}" alt="{{ product.title }}">
+      <div class="thumbs">
+        {% for m in product.media %}
+          <a href="{{ m | image_url: width: 1200 }}"><img src="{{ m | image_url: width: 160 }}" alt="{{ product.title }} {{ forloop.index }}"></a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+  <div class="product-details">
+    <h1>{{ product.title }}</h1>
+    <div class="price">{{ product.price | money }}</div>
+    {% if product.description %}<div class="rte">{{ product.description }}</div>{% endif %}
+
+    <div class="compatibility">
+      <strong>Compatibilité</strong>
+      <div>
+        {% assign compat_tags = product.tags | where: 'contains', 'marque_' %}
+        <span>
+          {% for t in product.tags %}
+            {% if t contains 'marque_' or t contains 'modele_' or t contains 'annee_' %}
+              <span class="compat-tag">{{ t | remove: 'marque_' | remove: 'modele_' | remove: 'annee_' | replace: '-', ' ' }}</span>
+            {% endif %}
+          {% endfor %}
+        </span>
+      </div>
+    </div>
+
+    <form method="post" action="/cart/add" class="add-to-cart">
+      <select name="id">
+        {% for variant in product.variants %}
+          <option value="{{ variant.id }}" {% if variant == product.selected_or_first_available_variant %}selected{% endif %} {% unless variant.available %}disabled{% endunless %}>
+            {{ variant.title }} - {{ variant.price | money }} {% unless variant.available %}(Rupture){% endunless %}
+          </option>
+        {% endfor %}
+      </select>
+      <button type="submit" class="btn-primary" {% unless product.available %}disabled{% endunless %}>Ajouter au panier</button>
+    </form>
+  </div>
+</div>

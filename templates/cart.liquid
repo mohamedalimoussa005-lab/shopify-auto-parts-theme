@@ -1,0 +1,44 @@
+<div class="cart-page">
+  <h1>Panier</h1>
+  {% if cart.item_count > 0 %}
+    <form action="/cart" method="post" novalidate>
+      <table class="cart-table">
+        <thead>
+          <tr>
+            <th>Produit</th>
+            <th>Prix</th>
+            <th>Quantité</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in cart.items %}
+            <tr>
+              <td>
+                <a href="{{ item.url }}">
+                  {% if item.image %}<img src="{{ item.image | image_url: width: 100 }}" alt="{{ item.title }}" style="width:60px;height:auto">{% endif %}
+                  {{ item.product.title }}
+                </a>
+                {% if item.variant.title != 'Default Title' %}<div>{{ item.variant.title }}</div>{% endif %}
+              </td>
+              <td>{{ item.price | money }}</td>
+              <td>
+                <input type="number" name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" min="0">
+              </td>
+              <td>{{ item.line_price | money }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="cart-actions">
+        <button type="submit" name="update" class="btn-secondary">Mettre à jour</button>
+        <div>
+          <strong>Sous-total:</strong> {{ cart.total_price | money }}
+          <button type="submit" name="checkout" class="btn-primary">Passer au paiement</button>
+        </div>
+      </div>
+    </form>
+  {% else %}
+    <p>Votre panier est vide.</p>
+  {% endif %}
+</div>

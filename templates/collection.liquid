@@ -1,0 +1,75 @@
+<div class="collection-layout" data-collection-filters data-collection-url="{{ collection.url }}">
+  <aside class="filters">
+    <h3>Filtres</h3>
+    <form>
+      <div class="filter-group">
+        <h4>Marque</h4>
+        <div class="options">
+          {% assign marcas = 'Renault,Peugeot,Citroën,Volkswagen,BMW,Audi' | split: ',' %}
+          {% for m in marcas %}
+            {% assign tag = 'marque_' | append: m | handle %}
+            <label><input type="checkbox" value="{{ tag }}" {% if current_tags contains tag %}checked{% endif %}> {{ m }}</label>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="filter-group">
+        <h4>Modèle</h4>
+        <div class="options">
+          {% assign models = 'Clio,208,C3,Golf,Serie 3,A4' | split: ',' %}
+          {% for mm in models %}
+            {% assign tag = 'modele_' | append: mm | handle %}
+            <label><input type="checkbox" value="{{ tag }}" {% if current_tags contains tag %}checked{% endif %}> {{ mm }}</label>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="filter-group">
+        <h4>Année</h4>
+        <div class="options">
+          {% assign years = '2005,2008,2012,2016,2020' | split: ',' %}
+          {% for y in years %}
+            {% assign tag = 'annee_' | append: y | handle %}
+            <label><input type="checkbox" value="{{ tag }}" {% if current_tags contains tag %}checked{% endif %}> {{ y }}</label>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="filter-group">
+        <h4>Type de pièce</h4>
+        <div class="options">
+          {% assign types = 'Freinage,Filtration,Moteur,Suspension,Electricite' | split: ',' %}
+          {% for t in types %}
+            {% assign tag = 'type_' | append: t | handle %}
+            <label><input type="checkbox" value="{{ tag }}" {% if current_tags contains tag %}checked{% endif %}> {{ t }}</label>
+          {% endfor %}
+        </div>
+      </div>
+    </form>
+  </aside>
+  <section>
+    <h1>{{ collection.title }}</h1>
+    {% if collection.description %}<div class="rte">{{ collection.description }}</div>{% endif %}
+    <div class="product-grid">
+      {% for product in collection.products %}
+        <article class="product-card">
+          <a href="{{ product.url }}">
+            {% if product.featured_image %}
+              <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.title }}">
+            {% endif %}
+            <div class="info">
+              <div class="title">{{ product.title }}</div>
+              <div class="price">{{ product.price | money }}</div>
+            </div>
+          </a>
+        </article>
+      {% else %}
+        <p>Aucun produit trouvé.</p>
+      {% endfor %}
+    </div>
+    {% paginate collection.products by 24 %}
+      <div class="pagination">
+        {% if paginate.previous %}<a href="{{ paginate.previous.url }}">Précédent</a>{% endif %}
+        <span>{{ paginate.current_page }} / {{ paginate.pages }}</span>
+        {% if paginate.next %}<a href="{{ paginate.next.url }}">Suivant</a>{% endif %}
+      </div>
+    {% endpaginate %}
+  </section>
+</div>
