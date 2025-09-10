@@ -45,6 +45,9 @@
           <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
           <button class="btn" type="submit">Ajouter au panier</button>
         </form>
+        <div class="quick-actions">
+          <button class="icon-btn" type="button" aria-label="Ajouter aux favoris" data-wishlist data-handle="{{ product.handle }}">❤</button>
+        </div>
       </article>
     {% else %}
       <p>Aucun produit trouvé. Sélectionnez une collection.</p>
