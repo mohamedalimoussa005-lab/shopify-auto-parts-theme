@@ -85,6 +85,11 @@ document.addEventListener('DOMContentLoaded', () => {
     filterRoot.addEventListener('change', applyFilters);
     applyFilters();
   }
+
+  // Init extras
+  initCarousel();
+  initWishlist();
+  initFitment();
 });
 
 // Wishlist (localStorage)
@@ -128,6 +133,33 @@ function initCarousel(){
     let i = 0;
     const go = (n)=>{ i = (n+slides.length) % slides.length; track.style.transform = `translateX(-${i*100}%)`; };
     setInterval(()=>go(i+1), 6000);
+  });
+}
+
+// Fitment (Make/Model/Year)
+function initFitment(){
+  const data = (window.__FITMENT__ && window.__FITMENT__.data) || null;
+  const form = document.querySelector('#fitment-form');
+  if(!form || !data) return;
+  const selMake = document.querySelector('#fitment-make');
+  const selModel = document.querySelector('#fitment-model');
+  const selYear = document.querySelector('#fitment-year');
+  const applyBtn = document.querySelector('#fitment-apply');
+  selMake.addEventListener('change', ()=>{
+    const make = selMake.value; selModel.innerHTML = '<option value="">Sélectionner</option>'; selModel.disabled = !make; selYear.disabled = true; selYear.innerHTML = '<option value="">—</option>';
+    if(make){ Object.keys(data[make]||{}).forEach(m=>{ const o=document.createElement('option'); o.value=m; o.textContent=m; selModel.appendChild(o); }); }
+  });
+  selModel.addEventListener('change', ()=>{
+    const make = selMake.value; const model = selModel.value; selYear.innerHTML = '<option value="">Sélectionner</option>'; selYear.disabled = !model;
+    if(model){ (data[make]?.[model]||[]).forEach(y=>{ const o=document.createElement('option'); o.value=y; o.textContent=y; selYear.appendChild(o); }); }
+  });
+  selYear.addEventListener('change', ()=>{ applyBtn.disabled = !(selMake.value && selModel.value && selYear.value); });
+  applyBtn.addEventListener('click', ()=>{
+    const query = `${selMake.value}|${selModel.value}|${selYear.value}`.toLowerCase();
+    document.querySelectorAll('[data-product-card]')?.forEach(card=>{
+      const fit = (card.getAttribute('data-fitment')||'').toLowerCase();
+      card.style.display = fit.includes(query) ? '' : 'none';
+    });
   });
 }
 

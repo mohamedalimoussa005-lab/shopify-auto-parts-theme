@@ -1,0 +1,21 @@
+<div class="container" style="padding:20px 0">
+  <h1>Marques</h1>
+  <div class="category-grid">
+    {% assign vendors = '' %}
+    {% for c in collections %}
+      {% for p in c.products %}
+        {% unless vendors contains p.vendor %}{% assign vendors = vendors | append: p.vendor | append: ',' %}{% endunless %}
+      {% endfor %}
+    {% endfor %}
+    {% assign vendors = vendors | split: ',' | uniq %}
+    {% for v in vendors %}
+      {% if v != blank %}
+        <a class="category-tile" href="/collections/vendors?q={{ v | url_encode }}">
+          <div style="height:220px;background:#e9edf2;display:grid;place-items:center;font-weight:700">{{ v }}</div>
+          <div class="category-overlay"><div>{{ v }}</div><span class="tile-cta">Voir la marque</span></div>
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+

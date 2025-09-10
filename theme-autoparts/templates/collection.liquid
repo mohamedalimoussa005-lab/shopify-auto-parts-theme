@@ -28,7 +28,8 @@
     <div class="product-grid">
       {% for product in collection.products %}
         {% assign price_number = product.price | divided_by: 100.0 %}
-        <article class="card" data-product-card data-vendor="{{ product.vendor }}" data-type="{{ product.type }}" data-price="{{ price_number }}" data-rating="{{ product.metafields.reviews.rating.value | default: 0 }}">
+        {% assign fitment_str = product.metafields.autoparts.fitment | default: '' %}
+        <article class="card" data-product-card data-vendor="{{ product.vendor }}" data-type="{{ product.type }}" data-price="{{ price_number }}" data-rating="{{ product.metafields.reviews.rating.value | default: 0 }}" data-fitment="{{ fitment_str | escape }}">
           <a class="media" href="{{ product.url }}">
             <img src="{{ product | img_url: '540x' }}" alt="{{ product.title | escape }}">
           </a>

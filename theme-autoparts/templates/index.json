@@ -1,10 +1,11 @@
 {
   "sections": {
+    "fitment": { "type": "fitment-search", "settings": {} },
     "hero": { "type": "hero-carousel", "settings": {} },
     "featured": { "type": "featured-products", "settings": {} },
     "categories": { "type": "popular-categories", "settings": {} },
     "reviews": { "type": "testimonials-security", "settings": {} }
   },
-  "order": ["hero", "featured", "categories", "reviews"]
+  "order": ["fitment", "hero", "featured", "categories", "reviews"]
 }
 
