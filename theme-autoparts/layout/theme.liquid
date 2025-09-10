@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{{ page_title }}{% if current_tags %} – {{ current_tags | join: ", " }}{% endif %}{% if current_page != 1 %} – Page {{ current_page }}{% endif %} – {{ shop.name }}</title>
+    {{ content_for_header }}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Roboto:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="{{ 'theme.css.liquid' | asset_url }}" rel="stylesheet">
+    <script defer src="{{ 'theme.js' | asset_url }}"></script>
+  </head>
+  <body class="theme-autoparts">
+    {% section 'header' %}
+
+    <main id="MainContent" role="main">
+      {% render 'breadcrumbs' %}
+      {{ content_for_layout }}
+    </main>
+
+    {% section 'footer' %}
+
+    <div id="floating-chat" class="floating-chat" aria-live="polite">
+      <button class="chat-toggle" aria-expanded="false" aria-controls="chat-panel">?
+      </button>
+      <div id="chat-panel" class="chat-panel" hidden>
+        <div class="chat-header">Assistance</div>
+        <div class="chat-body">
+          <p>Comment pouvons-nous vous aider ?</p>
+          <ul class="chat-quicklinks">
+            <li><a href="/pages/faq">FAQ</a></li>
+            <li><a href="/pages/contact">Contact</a></li>
+            <li><a href="/policies/refund-policy">Retours</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </body>
+  </html>
+

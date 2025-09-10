@@ -1,0 +1,53 @@
+<section class="hero container">
+  <div class="carousel">
+    <div class="carousel-track">
+      {% for block in section.blocks %}
+        <div class="carousel-slide" {{ block.shopify_attributes }}>
+          {% if block.settings.image %}
+            <img src="{{ block.settings.image | img_url: '1600x' }}" alt="" style="width:100%;height:460px;object-fit:cover;display:block;">
+          {% else %}
+            <div style="height:460px;background:#e9edf2"></div>
+          {% endif %}
+          <div class="hero-card">
+            <h2>{{ block.settings.title }}</h2>
+            {% if block.settings.subtitle != blank %}<p>{{ block.settings.subtitle }}</p>{% endif %}
+            <div style="display:flex;gap:10px;margin-top:8px;">
+              {% if block.settings.cta_label != blank %}
+                <a class="btn" href="{{ block.settings.cta_link }}">{{ block.settings.cta_label }}</a>
+              {% endif %}
+              {% if block.settings.cta2_label != blank %}
+                <a class="btn btn-accent" href="{{ block.settings.cta2_link }}">{{ block.settings.cta2_label }}</a>
+              {% endif %}
+            </div>
+            {% if section.settings.microtext != blank %}
+              <div style="margin-top:8px;opacity:.9;font-size:.95rem">{{ section.settings.microtext }}</div>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Carrousel Hero",
+  "settings": [
+    {"type":"text","id":"microtext","label":"Micro-texte","default":"Livraison rapide | Garantie constructeur | Paiement sécurisé"}
+  ],
+  "blocks": [
+    {"type":"slide","name":"Diapositive","settings": [
+      {"type":"image_picker","id":"image","label":"Image"},
+      {"type":"text","id":"title","label":"Titre","default":"-20% sur les plaquettes de frein"},
+      {"type":"text","id":"subtitle","label":"Sous-titre","default":"Profitez des promotions et nouveautés"},
+      {"type":"text","id":"cta_label","label":"CTA principal","default":"Achetez maintenant"},
+      {"type":"url","id":"cta_link","label":"Lien CTA"},
+      {"type":"text","id":"cta2_label","label":"CTA secondaire","default":"Voir la collection"},
+      {"type":"url","id":"cta2_link","label":"Lien CTA 2"}
+    ]}
+  ],
+  "max_blocks": 5,
+  "presets": [{"name":"Carrousel Hero","category":"Bannière"}]
+}
+{% endschema %}
+

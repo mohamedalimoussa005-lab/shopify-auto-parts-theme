@@ -1,0 +1,66 @@
+<section class="container" data-filters-root>
+  {% assign coll = collections[section.settings.collection] %}
+  <header style="display:flex;justify-content:space-between;align-items:end;gap:12px;">
+    <div>
+      <h2>{{ section.settings.heading }}</h2>
+      <p style="color:#5a6676">Produits phares / Nouveautés</p>
+    </div>
+    <div class="filters">
+      <fieldset>
+        <legend style="font-weight:600">Marque</legend>
+        {% assign vendors = '' %}
+        {% for p in coll.products limit: 24 %}
+          {% unless vendors contains p.vendor %}{% assign vendors = vendors | append: p.vendor | append: ',' %}{% endunless %}
+        {% endfor %}
+        {% assign vendors = vendors | split: ',' | uniq %}
+        {% for v in vendors %}
+          {% if v != blank %}
+            <label><input type="checkbox" name="vendor" value="{{ v }}"> {{ v }}</label>
+          {% endif %}
+        {% endfor %}
+      </fieldset>
+      <fieldset>
+        <legend style="font-weight:600">Prix max</legend>
+        <input id="price-range" type="range" min="0" max="1000" step="10" value="0">
+      </fieldset>
+      <fieldset>
+        <legend style="font-weight:600">Avis min</legend>
+        <input id="rating-min" type="number" min="0" max="5" step="1" value="0" style="width:60px">
+      </fieldset>
+    </div>
+  </header>
+
+  <div class="product-grid">
+    {% for product in coll.products limit: section.settings.limit %}
+      {% assign price_number = product.price | divided_by: 100.0 %}
+      <article class="card" data-product-card data-vendor="{{ product.vendor }}" data-type="{{ product.type }}" data-price="{{ price_number }}" data-rating="{{ product.metafields.reviews.rating.value | default: 0 }}">
+        <a class="media" href="{{ product.url }}">
+          <img src="{{ product | img_url: '540x' }}" alt="{{ product.title | escape }}">
+        </a>
+        <div>
+          <div style="font-weight:600">{{ product.title }}</div>
+          <div class="price">{{ product.price | money }}</div>
+        </div>
+        <form class="add-to-cart" method="post" action="/cart/add">
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+          <button class="btn" type="submit">Ajouter au panier</button>
+        </form>
+      </article>
+    {% else %}
+      <p>Aucun produit trouvé. Sélectionnez une collection.</p>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Produits phares/Nouveautés",
+  "settings": [
+    {"type":"text","id":"heading","label":"Titre","default":"Produits phares"},
+    {"type":"collection","id":"collection","label":"Collection"},
+    {"type":"range","id":"limit","label":"Nombre de produits","min":4,"max":24,"step":4,"default":8}
+  ],
+  "presets": [{"name":"Produits phares","category":"Produits"}]
+}
+{% endschema %}
+

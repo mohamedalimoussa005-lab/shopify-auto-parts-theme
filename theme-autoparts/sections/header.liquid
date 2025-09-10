@@ -1,0 +1,47 @@
+<header class="site-header">
+  <div class="container bar">
+    <a class="logo" href="/" aria-label="{{ shop.name }}">
+      <span class="logo-mark" aria-hidden="true">🚗</span>
+      <span>{{ section.settings.logo_text | default: shop.name }}</span>
+    </a>
+
+    <div class="search" role="search">
+      <input id="predictive-search-input" type="search" name="q"
+        placeholder="Recherchez par modèle, marque ou référence" autocomplete="off" aria-controls="predictive-results">
+      <span class="icon">🔍</span>
+      <div id="predictive-results" class="predictive-results" role="listbox" aria-label="Suggestions"></div>
+    </div>
+
+    <div class="header-icons">
+      <a class="icon-btn" href="/account" aria-label="Compte">👤</a>
+      <a class="icon-btn" href="/pages/wishlist" aria-label="Favoris">❤</a>
+      <a class="icon-btn" href="/cart" aria-label="Panier">🛒</a>
+    </div>
+  </div>
+
+  <nav class="main-nav">
+    <div class="container">
+      <div class="menu">
+        <a href="/">Accueil</a>
+        <a href="/collections" class="has-sub">Catégories</a>
+        <a href="/collections/vendors?q=">Marques</a>
+        <a href="/collections/promo" class="accent">Promotions</a>
+        <a href="/blogs/news">Blog / Conseils</a>
+      </div>
+    </div>
+  </nav>
+
+  <style>
+    .site-header .menu .accent{background:var(--color-accent);color:#111}
+  </style>
+
+  {% schema %}
+  {
+    "name": "En-tête",
+    "settings": [
+      {"type": "text", "id": "logo_text", "label": "Texte du logo", "default": "AutoParts"}
+    ]
+  }
+  {% endschema %}
+</header>
+

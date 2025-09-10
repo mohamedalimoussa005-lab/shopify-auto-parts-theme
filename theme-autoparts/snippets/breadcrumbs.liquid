@@ -1,0 +1,26 @@
+{% unless template == 'index' %}
+  <nav class="breadcrumbs container" aria-label="Fil d'Ariane">
+    <a href="/">Accueil</a>
+    {% if collection %}
+      &nbsp;/&nbsp;
+      <a href="/collections">Catégories</a>
+      &nbsp;/&nbsp;
+      <span>{{ collection.title }}</span>
+    {% elsif product %}
+      &nbsp;/&nbsp;
+      <a href="/collections">Catégories</a>
+      {% if collection %}&nbsp;/&nbsp;<a href="{{ collection.url }}">{{ collection.title }}</a>{% endif %}
+      &nbsp;/&nbsp;
+      <span>{{ product.title }}</span>
+    {% elsif article %}
+      &nbsp;/&nbsp;
+      <a href="{{ blog.url }}">{{ blog.title }}</a>
+      &nbsp;/&nbsp;
+      <span>{{ article.title }}</span>
+    {% elsif page %}
+      &nbsp;/&nbsp;
+      <span>{{ page.title }}</span>
+    {% endif %}
+  </nav>
+{% endunless %}
+
